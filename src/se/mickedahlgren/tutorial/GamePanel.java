@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	static final int SCREEN_HEIGHT = 600;
 	static final int UNIT_SIZE = SCREEN_HEIGHT/24; 
 	static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE;
-	static final int DELAY = 150; // game speed
+	int gameTimeDelay = 150; // game speed
 	final int x[] = new int[GAME_UNITS];
 	final int y[] = new int[GAME_UNITS];
 	int bodyParts = 6;
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		newApple();
 		
 		running = true;
-		timer = new Timer(DELAY, this);
+		timer = new Timer(gameTimeDelay, this);
 		timer.start();
 	}
 	
@@ -47,6 +47,10 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	
 	public void draw(Graphics g) {
+		if(!running) {
+			gameOver(g);
+			return;
+		}
 		// debug grid
 		for(int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
 			g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
@@ -68,6 +72,17 @@ public class GamePanel extends JPanel implements ActionListener{
 				g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
 			}
 		}
+		
+		// paint score
+		g.setColor(Color.white);
+		g.setFont(new Font("Arial", Font.BOLD, 25));
+		FontMetrics metrics = getFontMetrics(g.getFont());
+		int margin = (int)SCREEN_WIDTH/32;
+		g.drawString(
+			"Score: " + applesEaten, 
+			(SCREEN_WIDTH - (metrics.stringWidth("Score: " + applesEaten) + margin)), 
+			margin
+		);
 	}
 	
 	public void newApple() {
@@ -98,7 +113,12 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	
 	public void checkApple() {
-		
+		if(x[0] == appleX && y[0] == appleY) {
+			bodyParts++;
+			applesEaten++;
+			gameTimeDelay -= 5 ;
+			newApple();
+		}
 	}
 	
 	public void checkCollisions() {
@@ -122,7 +142,18 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	
 	public void gameOver(Graphics g) {
-		
+		// Game Over Text
+		GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		String[] fonts = gEnv.getAvailableFontFamilyNames();
+		int randomFontIndex = random.nextInt(fonts.length - 1);
+		g.setColor(Color.red);
+		g.setFont(new Font(fonts[randomFontIndex], Font.BOLD, 75));
+		FontMetrics metrics = getFontMetrics(g.getFont());
+		g.drawString(
+			"Game Over", 
+			(SCREEN_WIDTH - metrics.stringWidth("Game Over"))/2, 
+			SCREEN_HEIGHT/2 
+		);
 	}
 	
 	public class MyKeyAdapter extends KeyAdapter{
