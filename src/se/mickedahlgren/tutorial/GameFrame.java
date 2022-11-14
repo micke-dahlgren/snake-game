@@ -3,6 +3,11 @@ package se.mickedahlgren.tutorial;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5062988707170943793L;
+
 	GameFrame(){
 		this.add(new GamePanel());
 		this.setTitle("Snake");
