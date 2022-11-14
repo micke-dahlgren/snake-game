@@ -58,6 +58,11 @@ public class GameLogic {
 			GamePanel.SCREEN_W/2 - 200, 
 			GamePanel.SCREEN_H/2 
 		);
+		g.drawString(
+				"Your score: " + snake.applesEaten, 
+				GamePanel.SCREEN_W/2 - 200, 
+				GamePanel.SCREEN_H/2 + 100
+			);
 	}
 
 

@@ -9,7 +9,11 @@ public class PowerUp extends RandomSpawnEntity{
 	private int timeTilSpawn = 0;
 	private int spawnCounter = 0;
 	void draw(Graphics g) {
-		g.setColor(Color.blue);
+		random = new Random();
+		int red = Math.max(50, random.nextInt(255));
+		int green = Math.max(50, random.nextInt(255));
+		int blue = Math.max(50, random.nextInt(255));
+		g.setColor(new Color(red, green, blue));
 		g.fillOval(this.x, this.y, UNIT_SIZE, UNIT_SIZE);
 	}
 	
